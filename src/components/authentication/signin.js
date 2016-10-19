@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {View, Text, StyleSheet, TextInput,} from 'react-native';
+import {View, Text, StyleSheet, TextInput} from 'react-native';
 
 var Parse = require('parse/react-native');
 var Button = require('../common/button');
@@ -31,8 +31,13 @@ module.exports = React.createClass({
           />
         <Text style={styles.label}>{this.state.errorMessage}</Text>
         <Button text={'Sign In'} onPress={this.onPress} />
+        <Button text={'I need an account...'} onPress={this.onSignupPress} />
       </View>
     );
+  },
+  onSignupPress: function(){
+    //navigate over to signup
+    this.props.navigator.push({name: 'signup'});
   },
   onPress: function(){
       Parse.User.login(this.state.username, this.state.password, {
