@@ -1,23 +1,43 @@
 import React, {Component} from 'react'
 import {View, Text, StyleSheet, TextInput} from 'react-native';
 
+var Parse = require('parse/react-native');
 var Button = require('../common/button');
 
 module.exports = React.createClass({
+  getInitialState: function(){
+    return {
+      username: '',
+      password: ''
+    };
+  },
   render: function(){
     return (
       <View style={styles.container}>
         <Text>Sign In</Text>
+
         <Text style={styles.label}>Username:</Text>
-        <TextInput style={styles.input}/>
+        <TextInput
+          style={styles.input}
+          value={this.state.username}
+          onChangeText={(text) => this.setState({username: text})}
+          />
         <Text style= {styles.label}>Password:</Text>
-        <TextInput secureTextEntry={true} style={styles.input}/>
+        <TextInput secureTextEntry={true}
+          style={styles.input}
+          value={this.state.password}
+          onChangeText={(text) => this.setState({password: text})}
+          />
+
         <Button text={'Sign In'} onPress={this.onPress} />
       </View>
     );
   },
   onPress: function(){
-    //log the user in
+      Parse.User.login(this.state.username, this.state.password, {
+        success: (user) => { console.log(user); },
+        error: (data, error) => {console.log(data,error); }
+      });
   }
 });
 
