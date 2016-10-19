@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {View, Text, StyleSheet, TextInput} from 'react-native';
+import {View, Text, StyleSheet, TextInput,} from 'react-native';
 
 var Parse = require('parse/react-native');
 var Button = require('../common/button');
@@ -8,7 +8,8 @@ module.exports = React.createClass({
   getInitialState: function(){
     return {
       username: '',
-      password: ''
+      password: '',
+      errorMessage: ''
     };
   },
   render: function(){
@@ -28,7 +29,7 @@ module.exports = React.createClass({
           value={this.state.password}
           onChangeText={(text) => this.setState({password: text})}
           />
-
+        <Text style={styles.label}>{this.state.errorMessage}</Text>
         <Button text={'Sign In'} onPress={this.onPress} />
       </View>
     );
@@ -36,7 +37,7 @@ module.exports = React.createClass({
   onPress: function(){
       Parse.User.login(this.state.username, this.state.password, {
         success: (user) => { console.log(user); },
-        error: (data, error) => {console.log(data,error); }
+        error: (data, error) => { this.setState({ errorMessage: error.message }); }
       });
   }
 });
