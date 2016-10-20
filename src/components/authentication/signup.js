@@ -1,14 +1,16 @@
 import React, {Component} from 'react'
 import {View, Text, StyleSheet, TextInput} from 'react-native';
 
-var Button = require('../common/button')
+var Parse = require('parse/react-native');
+var Button = require('../common/button');
 
 module.exports = React.createClass({
   getInitialState: function(){
     return {
       username: '',
       password: '',
-      passwordConfirmation: ''
+      passwordConfirmation: '',
+      errorMessage: ''
     }
   },
   render: function(){
@@ -24,20 +26,38 @@ module.exports = React.createClass({
 
         <Text style={styles.label}>Password:</Text>
         <TextInput
+          secureTextEntry={true}
           value={this.state.password}
           onChangeText={(text) => this.setState({password: text})}
           style={styles.input} />
 
         <Text style={styles.label}>Confirm Password:</Text>
         <TextInput
+          secureTextEntry={true}
           value={this.state.passwordConfirmation}
           onChangeText={(text) => this.setState({passwordConfirmation: text})}
           style={styles.input} />
 
+        <Text style={styles.label}>{this.state.errorMessage}</Text>
+        <Button text={'Signup'}  onPress={this.onSignupPress}/>
         <Button text={'I already have an account...'} onPress={this.onSigninPress}/>
 
       </View>
     );
+  },
+  onSignupPress: function(){
+    if (this.state.password !== this.state.passwordConfirmation){
+      return this.setState({errorMessage: 'Your passwords do not match'})
+    }
+
+    var user = new Parse.user();
+    user.set('username', this.state.username);
+    user.set('password', this.state.password);
+
+    user.signUp(null, {
+      success: (user) => { this.props.navigator.immediatelyResetRouteStack([{name: 'tweets'}]); },
+      error: (user, error) => { this.setState({ errorMessage: error.message }); }
+    });
   },
   onSigninPress: function(){
     this.props.navigator.pop();

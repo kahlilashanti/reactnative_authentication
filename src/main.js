@@ -4,12 +4,14 @@ import React, {Component} from 'react'
 import {StyleSheet, Navigator} from 'react-native';
 
 var Parse = require('parse/react-native');
-var Signin = require('./components/authentication/signin')
-var Signup = require('./components/authentication/signup')
+var Signin = require('./components/authentication/signin');
+var Signup = require('./components/authentication/signup');
+var Tweets = require('./components/tweets/tweets');
 
 var ROUTES = {
   signin: Signin,
-  signup: Signup
+  signup: Signup,
+  tweets: Tweets
 };
 
 module.exports = React.createClass({
